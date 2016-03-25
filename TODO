@@ -1,0 +1,3 @@
+Something with cropping to trim out that margin:
+
+gs -o cropped.pdf -sDEVICE=pdfwrite -g5400x7200 -c '<</PageOffset [-36 -36]>> setpagedevice' -f source/Mag7-Color/ChartC-1.pdf
