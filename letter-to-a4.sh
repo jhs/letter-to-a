@@ -10,17 +10,18 @@ main () {
 
   for size in A3 A4 A5 ; do
     for style in $(styles) ; do
-      echo "== Build: $size $style ==" >&2
+      for zoom in NoZoom HalfZoom FullZoom ; do
+        echo "== Build: $size $style with $zoom ==" >&2
+        local target=$(target_name $style $size $zoom)
 
-      for page_num in $(page_numbers) ; do
-        local source=$(source_file $style $page_num)
-        local target=$(target_name $style $size)
+        for page_num in $(page_numbers) ; do
+          local source=$(source_file $style $page_num)
+          convert_page ${source} ${target} ${page_num} ${size} ${zoom}
+        done
 
-        convert_page ${source} ${target} ${page_num} ${size}
+        collate $size $style $zoom
+        echo "" >&2
       done
-
-      collate $size $style
-      echo "" >&2
     done
   done
 }
@@ -58,7 +59,8 @@ source_file () {
 target_name () {
   local style=$1
   local size=$2
-  local dir="$root/target/$size/$style"
+  local zoom=$3
+  local dir="$root/target/$size/$style/$zoom"
 
   mkdir -p ${dir}
   echo ${dir}
@@ -67,9 +69,17 @@ target_name () {
 collate () {
   local size=$1
   local style=$2
-  local target_name=$(target_name $style $size)
+  local zoom=$3
+
+  local target_name=$(target_name $style $size $zoom)
   local source_dir=${target_name}/pages
-  local target_file="${target_name}/Mag7-$style-$size-All.pdf"
+
+  local target_file="${target_name}/Mag7-$style-$size"
+  if [ $zoom != 'NoZoom' ]; then
+    target_file="$target_file-$zoom"
+  fi
+  target_file="$target_file.pdf"
+
   local page_size=$(echo $size | tr A-Z a-z)
 
   local opts="-q -sDEVICE=pdfwrite -sPAPERSIZE=$page_size -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4"
