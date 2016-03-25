@@ -14,18 +14,16 @@ main () {
 
   for size in $(sizes) ; do
     for style in $(styles) ; do
-      for zoom in NoZoom HalfZoom FullZoom ; do
-        echo "== Build: $size $style with $zoom ==" >&2
-        local target=$(target_name $style $size $zoom)
+      echo "== Build: $size $style ==" >&2
+      local target=$(target_name $style $size $zoom)
 
-        for page_num in $(page_numbers) ; do
-          local source=$(source_file $style $page_num)
-          convert_page ${source} ${target} ${page_num} ${size} ${zoom} || exit $?
-        done
-
-        collate $size $style $zoom
-        echo "" >&2
+      for page_num in $(page_numbers) ; do
+        local source=$(source_file $style $page_num)
+        convert_page ${source} ${target} ${page_num} ${size} ${zoom} || exit $?
       done
+
+      collate $size $style $zoom
+      echo "" >&2
     done
   done
 }
@@ -48,6 +46,28 @@ convert_page () {
   gs $opts -o ${target_file} ${source}
 }
 
+# This is for posterity, but it does not really work well enough.
+#zoom_command () {
+#  local scale=1
+#  case "$1" in
+#    'FullZoom') scale=1.12 ;;
+#    *) : ;;
+#  esac
+#
+#  local height=210 # mm
+#  local mm_to_pt=2.8346456664
+#  height=$(echo "$height * $mm_to_pt" | bc)
+#  local growth=$(echo "($scale - 1.0) * $height" | bc)
+#  local ty=-$(echo "$growth / 2.0" | bc)
+#
+#  local width=297 # mm
+#  width=$(echo "$width * $mm_to_pt" | bc)
+#  local growth=$(echo "($scale - 1.0) * $width" | bc)
+#  local tx=-$(echo "$growth / 2.0" | bc)
+#
+#  echo "<</BeginPage{$scale $scale scale $tx $ty translate}>> setpagedevice"
+#}
+
 source_file () {
   local style=$1
   local num=$2
@@ -63,8 +83,7 @@ source_file () {
 target_name () {
   local style=$1
   local size=$2
-  local zoom=$3
-  local dir="$root/target/$size/$style/$zoom"
+  local dir="$root/target/$size/$style"
 
   mkdir -p ${dir}
   echo ${dir}
@@ -73,17 +92,11 @@ target_name () {
 collate () {
   local size=$1
   local style=$2
-  local zoom=$3
 
-  local target_name=$(target_name $style $size $zoom)
+  local target_name=$(target_name $style $size)
   local source_dir=${target_name}/pages
 
-  local target_file="${target_name}/Mag7-$style-$size"
-  if [ $zoom != 'NoZoom' ]; then
-    target_file="$target_file-$zoom"
-  fi
-  target_file="$target_file.pdf"
-
+  local target_file="${target_name}/Mag7-$style-$size.pdf"
   local page_size=$(echo $size | tr A-Z a-z)
 
   local opts="-q -sDEVICE=pdfwrite -sPAPERSIZE=$page_size -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4"
