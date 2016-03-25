@@ -42,7 +42,13 @@ convert_page () {
 source_file () {
   local style=$1
   local num=$2
-  echo "$root/source/Mag7-$style/Chart-$num.pdf"
+
+  local name='Chart'
+  if [ $style = 'Color' ]; then
+    name='ChartC'
+  fi
+
+  echo "$root/source/Mag7-$style/$name-$num.pdf"
 }
 
 target_name () {
@@ -99,9 +105,7 @@ prep_source_files () {
 }
 
 styles () {
-  echo BW
-  return
-  echo "BW Color"
+  echo BW Color
 }
 
 clean () {
