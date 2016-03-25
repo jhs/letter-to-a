@@ -8,16 +8,19 @@ source_dir=${root}/source
 main () {
   prep_source_files
 
-  for size in A4 ; do
+  for size in A3 A4 A5 ; do
     for style in $(styles) ; do
+      echo "== Build: $size $style ==" >&2
+
       for page_num in $(page_numbers) ; do
         local source=$(source_file $style $page_num)
         local target=$(target_name $style $size)
 
-        convert_page ${source} ${target} ${page_num}
+        convert_page ${source} ${target} ${page_num} ${size}
       done
 
       collate $size $style
+      echo "" >&2
     done
   done
 }
@@ -26,11 +29,12 @@ convert_page () {
   local source=${1}
   local target_name=${2}
   local page_num=${3}
+  local page_size=$(echo $4 | tr A-Z a-z)
 
   local target_dir=${target_name}/pages
   local target_file=${target_name}/pages/Chart-$(pad ${page_num}).pdf
 
-  local opts="-q -sDEVICE=pdfwrite -sPAPERSIZE=a4 -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4"
+  local opts="-q -sDEVICE=pdfwrite -sPAPERSIZE=$page_size -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4"
 
   echo "Convert: $source -> $target_file" >&2
   echo "  gs $opts -o $target_file $source" >&2
@@ -54,7 +58,7 @@ source_file () {
 target_name () {
   local style=$1
   local size=$2
-  local dir="$root/target/Mag7/$style/$size"
+  local dir="$root/target/Mag7/$size/$style"
 
   mkdir -p ${dir}
   echo ${dir}
@@ -66,8 +70,9 @@ collate () {
   local target_name=$(target_name $style $size)
   local source_dir=${target_name}/pages
   local target_file="${target_name}/Mag7-$style-$size-All.pdf"
+  local page_size=$(echo $size | tr A-Z a-z)
 
-  local opts="-q -sDEVICE=pdfwrite -sPAPERSIZE=a4 -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4"
+  local opts="-q -sDEVICE=pdfwrite -sPAPERSIZE=$page_size -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4"
 
   echo "Collate: $target_name" >&2
   echo "  gs $opts -o $target_file $source_dir/*.pdf" >&2
