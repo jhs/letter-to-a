@@ -107,4 +107,12 @@ styles () {
   echo "BW Color"
 }
 
-main
+clean () {
+  echo "Clean..." >&2
+  rm -rf ${root}/target ${root}/source/Mag7-*
+}
+
+case $1 in
+  'clean') clean ;;
+  *) main ;;
+esac
