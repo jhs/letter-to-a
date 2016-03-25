@@ -104,7 +104,7 @@ prep_source_files () {
 styles () {
   echo BW
   return
-  echo "BW COLOR"
+  echo "BW Color"
 }
 
 main
