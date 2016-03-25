@@ -58,7 +58,7 @@ source_file () {
 target_name () {
   local style=$1
   local size=$2
-  local dir="$root/target/Mag7/$size/$style"
+  local dir="$root/target/$size/$style"
 
   mkdir -p ${dir}
   echo ${dir}
