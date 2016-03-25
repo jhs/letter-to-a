@@ -5,10 +5,14 @@
 root=$(dirname ${BASH_SOURCE})
 source_dir=${root}/source
 
+# Edit these for debugging and testing
+styles () { echo BW Color; }
+sizes () { echo A3 A4 A5; }
+
 main () {
   prep_source_files
 
-  for size in A3 A4 A5 ; do
+  for size in $(sizes) ; do
     for style in $(styles) ; do
       for zoom in NoZoom HalfZoom FullZoom ; do
         echo "== Build: $size $style with $zoom ==" >&2
@@ -16,7 +20,7 @@ main () {
 
         for page_num in $(page_numbers) ; do
           local source=$(source_file $style $page_num)
-          convert_page ${source} ${target} ${page_num} ${size} ${zoom}
+          convert_page ${source} ${target} ${page_num} ${size} ${zoom} || exit $?
         done
 
         collate $size $style $zoom
@@ -117,10 +121,6 @@ prep_source_files () {
     echo "Extract source files..." >&2
     tar xzf ${source_dir}/mag7-all.tar.xz -C ${source_dir}
   fi
-}
-
-styles () {
-  echo BW Color
 }
 
 clean () {
