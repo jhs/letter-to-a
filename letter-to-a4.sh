@@ -2,7 +2,12 @@
 #
 # Convert Letter source to A4
 
+root=$(dirname ${BASH_SOURCE})
+source_dir=${root}/source
+
 main () {
+  prep_source_files
+
   for style in $(styles) ; do
     for page_num in $(page_numbers) ; do
       local source=$(source_file $style $page_num)
@@ -78,6 +83,22 @@ page_numbers () {
   local head=$(seq 1 11)
   local tail=$(seq 12 20)
   echo "$head 11a $tail"
+}
+
+prep_source_files () {
+  local needs_extraction=''
+  for style in $(styles) ; do
+    local source_style=${source_dir}/Mag7-$style
+    if [ ! -d ${source_style} ]; then
+      echo "Missing source directory: $source_style" >&2
+      needs_extraction=true
+    fi
+  done
+
+  if [ ${needs_extraction} ]; then
+    echo "Extract source files..." >&2
+    tar xzf ${source_dir}/mag7-all.tar.xz -C ${source_dir}
+  fi
 }
 
 styles () {
