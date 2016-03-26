@@ -86,7 +86,7 @@ pages_download () {
   echo
   for i in $(pages); do
     local href="$size/$style/pages/Chart-$(pad $i).pdf"
-    echo "1. $(title $size $style) [page $i]($href)"
+    echo "1. [Page $i]($href): $(title $size $style)"
   done
 }
 
