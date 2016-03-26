@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Letter-to-a by jhs</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Letter-to-a</h1>
+        <h2>Convert US Letter PDFs to A4 by reducing</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/jhs/letter-to-a/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/jhs/letter-to-a/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/jhs/letter-to-a" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="letter-to-a" class="anchor" href="#letter-to-a" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Letter to A*</h1>
+
+<p>Convert US Letter PDFs to A3, A4, A5, etc.</p>
+
+<p>This project is a very simple shell script to convert U.S. Letter PDF pages into A4 pages (and also any other "A" size), and then collate them into one combined PDF document.</p>
+
+<p>Specifically, this works on the excellent <a href="http://www.cloudynights.com/page/articles/cat/articles/observing-skills/free-mag-7-star-charts-r1021">Mag-7 Star Atlas Project</a>. It is a very handy, twenty-page star atlas, if in an inconvenient paper size. So this script converts that to A4; and since we've already done that, we may as well generate A3 as an easy-to-see double-size format, as well as A5 as an easy-to-store half-size format.</p>
+
+<h2>
+<a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Downloads</h2>
+
+<p>The actual atlas files are available here (TODO).</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>You can build the files yourself on Linux or OS X (or Windows with something like Cygwin). First you will need <a href="http://www.ghostscript.com/">GNU Ghostscript</a>. Either install with <em>yum</em>, or <em>apt</em>, or for example on a Mac with <a href="http://brew.sh">Homebrew</a>:</p>
+
+<div class="highlight highlight-source-shell"><pre>brew install ghostscript</pre></div>
+
+<p>Next, just clone this project and run the script:</p>
+
+<div class="highlight highlight-source-shell"><pre>./letter-to-a4.sh</pre></div>
+
+<h2>
+<a id="development" class="anchor" href="#development" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Development</h2>
+
+<p>This script can easily be converted to work with other documents. Either fork it, or just learn from the Ghostscript calls for your own needs: see <code>convert_page()</code> and <code>collate()</code>.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>The source code in this project is licensed under the <a href="LICENSE">Apache 2.0</a> license. The source material is under Creative Commons, SA-ND.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
