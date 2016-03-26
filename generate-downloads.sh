@@ -9,9 +9,9 @@ main () {
   mkdir -p ${root}/target
   cat ${root}/download-head.md
 
-  for size in A3 A4 A5; do
+  for size in A4 A5 A3; do
     size_heading $size
-    for style in BW Color; do
+    for style in Color BW; do
       style_heading $size $style
       full_download $size $style
       pages_download $size $style
